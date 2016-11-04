@@ -1,7 +1,7 @@
 {
   "name": "selami/views",
   "type": "library",
-  "description": "Templating engine collections.",
+  "description": "Templating engines collection.",
   "keywords": ["Selami", "View", "Twig", "Smarty", "Plates", "Mustache", "Latte"],
   "homepage": "https://github.com/selamiphp/router",
   "license": "MIT",
