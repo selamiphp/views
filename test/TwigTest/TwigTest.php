@@ -95,9 +95,9 @@ class myTwigClass extends \PHPUnit_Framework_TestCase
     {
         $result = $this->view->render('var_dump.twig', ['parameters' => $this->queryParams]);
         $this->assertContains('array(3)', $result, "Twig didn't correctly dump variable.");
-        $this->assertContains('param1\'', $result, "Twig didn't correctly dump variable.");
-        $this->assertContains('param2\'', $result, "Twig didn't correctly dump variable.");
-        $this->assertContains('param3\'', $result, "Twig didn't correctly dump variable.");
+        $this->assertContains('param1', $result, "Twig didn't correctly dump variable.");
+        $this->assertContains('param2', $result, "Twig didn't correctly dump variable.");
+        $this->assertContains('param3', $result, "Twig didn't correctly dump variable.");
     }
 
     /**
