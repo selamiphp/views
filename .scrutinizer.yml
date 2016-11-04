@@ -1,0 +1,19 @@
+# .scrutinizer.yml
+
+checks:
+  php:
+    code_rating: true
+    duplication: true
+build:
+  environment:
+    php: '7.0.8'
+  tests:
+    override:
+      -
+        command: 'phpunit --coverage-clover=.soupmix_coverage'
+        coverage:
+          file: '.soupmix_coverage'
+          format: 'clover'
+filter:
+  excluded_paths:
+    - "test/"
