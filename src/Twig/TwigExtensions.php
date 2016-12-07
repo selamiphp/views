@@ -46,7 +46,7 @@ class TwigExtensions extends ExtensionsAbstract
             '_t',
             function(
                 $string,
-                $findAndReplace = null
+                array $findAndReplace = null
             ) {
                 $translation = _($string);
                 if (is_array($findAndReplace)) {
@@ -91,7 +91,7 @@ class TwigExtensions extends ExtensionsAbstract
                             $relative_path = str_replace('{'.$param.'}', $value, $relative_path);
                         }
                     }
-                    return $this->config['base_url'] . "/" . $relative_path;
+                    return $this->config['base_url'] . '/' . $relative_path;
                 }
                 return '';
             },
@@ -118,7 +118,7 @@ class TwigExtensions extends ExtensionsAbstract
                     $message = 'Widget ' . $widget . ' has not method name as ' . $widgetAction;
                     throw new BadMethodCallException($message);
                 }
-                $templateFileBasename = (isset($args['template'])) ? trim($args['template']) : $this->toSnakeCase->transform($widgetActionStr) . '.twig';
+                $templateFileBasename = isset($args['template']) ? trim($args['template']) : $this->toSnakeCase->transform($widgetActionStr) . '.twig';
                 $templateFullPath = $this->config['templates_dir'] . '/_widgets/' . $this->toSnakeCase->transform($widgetNameStr)
                     . '/' . $templateFileBasename;
 
@@ -141,8 +141,7 @@ class TwigExtensions extends ExtensionsAbstract
         $filter = new \Twig_SimpleFunction(
             'queryParams',
             function($queryParams, $prefix = '?') {
-                $params =  $prefix . http_build_query($queryParams);
-                return $params;
+                return $prefix . http_build_query($queryParams);
             },
             array('is_safe' => array('html'))
         );
@@ -166,6 +165,7 @@ class TwigExtensions extends ExtensionsAbstract
         $filter = new \Twig_SimpleFunction(
             'varDump',
             function($args) {
+                /** @noinspection ForgottenDebugOutputInspection */
                 var_dump($args);
             },
             array('is_safe' => array('html'))
@@ -175,16 +175,17 @@ class TwigExtensions extends ExtensionsAbstract
 
     protected function extendForPagination()
     {
+        /** @noinspection MoreThanThreeArgumentsInspection */
         $filter = new \Twig_SimpleFunction(
             'Pagination',
             function(
-                $total,
-                $current,
-                $linkTemplate,
-                $parentTemplate = '<ul class="pagination">(items)</ul>',
-                $itemTemplate = '<li class="(item_class)">(link)</li>',
-                $linkItemTemplate = '<a href="(href)" class="(link_class)">(text)</a>',
-                $ellipsesTemplate = '<li><a>...</a></li>'
+                int $total,
+                int $current,
+                string $linkTemplate,
+                string $parentTemplate = '<ul class="pagination">(items)</ul>',
+                string $itemTemplate = '<li class="(item_class)">(link)</li>',
+                string $linkItemTemplate = '<a href="(href)" class="(link_class)">(text)</a>',
+                string $ellipsesTemplate = '<li><a>...</a></li>'
             ) {
                 $items =  '';
                 $pageGroupLimit = 3;
@@ -199,7 +200,7 @@ class TwigExtensions extends ExtensionsAbstract
                 for ($i=1; $i <= $total; $i++) {
                     $values['(link_class)'] = '';
                     $values['(item_class)'] = '';
-                    if ($i == $current) {
+                    if ($i === $current) {
                         $values['(link_class)'] = 'active';
                         $values['(item_class)'] = 'active';
                     }

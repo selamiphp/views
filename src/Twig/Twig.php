@@ -7,15 +7,15 @@ use Selami\View\ViewInterface;
 
 class Twig implements ViewInterface
 {
-    private $twig = null;
+    private $twig;
     private $config = [
         'templates_dir' => '',
         'cache_dir'     => '',
         'debug'         => true,
-        'auto_reload'  => true
+        'auto_reload'   => true
 
     ];
-    public function __construct($config, $queryParams)
+    public function __construct(array $config, array $queryParams)
     {
         $this->config = array_merge($this->config,$config);
         $loader     = new \Twig_Loader_Filesystem($this->config['templates_dir']);
@@ -24,6 +24,11 @@ class Twig implements ViewInterface
             'debug'         => $this->config['debug'],
             'auto_reload'   => $this->config['auto_reload']
         ]);
+        $this->extendAndAddGlobals($queryParams);
+    }
+
+    private function extendAndAddGlobals(array $queryParams) {
+
         new TwigExtensions($this->twig, $this->config);
         $this->twig->addGlobal('_RC', $this->config); // Runtime Config values
         $this->twig->addGlobal('_QP', $queryParams); // Query Parameters ($_REQUEST)
