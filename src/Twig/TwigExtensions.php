@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace Selami\View\Twig;
 
-
 use Selami\View\ExtensionsAbstract;
 use Twig_Environment;
 use Camel\CaseTransformer;
@@ -44,7 +43,7 @@ class TwigExtensions extends ExtensionsAbstract
     {
         $filter = new \Twig_SimpleFunction(
             '_t',
-            function(
+            function (
                 $string,
                 array $findAndReplace = null
             ) {
@@ -65,7 +64,8 @@ class TwigExtensions extends ExtensionsAbstract
      * @param $translateArray
      * @return array
      */
-    private function buildTranslateArray(array $translateArray) {
+    private function buildTranslateArray(array $translateArray)
+    {
         $tmpArray = [];
         foreach ($translateArray as $key => $value) {
             $tmpArray['@'.$key] = $value;
@@ -77,7 +77,7 @@ class TwigExtensions extends ExtensionsAbstract
     {
         $filter = new \Twig_SimpleFunction(
             'getUrl',
-            function(
+            function (
                 $alias,
                 $params = []
             ) {
@@ -104,8 +104,7 @@ class TwigExtensions extends ExtensionsAbstract
     {
         $filter = new \Twig_SimpleFunction(
             'Widget_*_*',
-            function($widgetNameStr, $widgetActionStr, $args = [])
-            {
+            function ($widgetNameStr, $widgetActionStr, $args = []) {
                 $widgetAction = $this->toCamelCase->transform($widgetActionStr);
                 $widgetName = $this->toCamelCase->transform($widgetNameStr);
                 $widget = '\\' . $this->config['app_namespace'] . '\\Widget\\' . $widgetName;
@@ -118,13 +117,18 @@ class TwigExtensions extends ExtensionsAbstract
                     $message = 'Widget ' . $widget . ' has not method name as ' . $widgetAction;
                     throw new BadMethodCallException($message);
                 }
-                $templateFileBasename = isset($args['template']) ? trim($args['template']) : $this->toSnakeCase->transform($widgetActionStr) . '.twig';
-                $templateFullPath = $this->config['templates_dir'] . '/_widgets/' . $this->toSnakeCase->transform($widgetNameStr)
-                    . '/' . $templateFileBasename;
+                $templateFileBasename = $args['template'] ?? $this->toSnakeCase->transform($widgetActionStr) . '.twig';
+                $templateFullPath = $this->config['templates_dir'] . '/_widgets/'
+                    . $this->toSnakeCase->transform($widgetNameStr) . '/' . $templateFileBasename;
 
                 if (!file_exists($templateFullPath)) {
-                    throw new InvalidArgumentException($templateFileBasename . ' template file not found! ' . $widgetNameStr
-                        . '_' . $widgetActionStr . ' needs a main template file at:' . $templateFullPath);
+                    $message = sprintf(
+                        '%s  template file not found! %s needs a main template file at: %s',
+                        $templateFileBasename,
+                        $widgetNameStr . '_' . $widgetActionStr,
+                        $templateFullPath
+                    );
+                    throw new InvalidArgumentException($message);
                 }
                 $templateFile =  '_widgets/'
                     . $this->toSnakeCase->transform($widgetNameStr) . '/' . $templateFileBasename;
@@ -140,7 +144,7 @@ class TwigExtensions extends ExtensionsAbstract
     {
         $filter = new \Twig_SimpleFunction(
             'queryParams',
-            function($queryParams, $prefix = '?') {
+            function ($queryParams, $prefix = '?') {
                 return $prefix . http_build_query($queryParams);
             },
             array('is_safe' => array('html'))
@@ -152,7 +156,7 @@ class TwigExtensions extends ExtensionsAbstract
     {
         $filter = new \Twig_SimpleFunction(
             'siteUrl',
-            function($path = '') {
+            function ($path = '') {
                 return $this->config['base_url'] . $path;
             },
             array('is_safe' => array('html'))
@@ -164,7 +168,7 @@ class TwigExtensions extends ExtensionsAbstract
     {
         $filter = new \Twig_SimpleFunction(
             'varDump',
-            function($args) {
+            function ($args) {
                 /** @noinspection ForgottenDebugOutputInspection */
                 var_dump($args);
             },
@@ -178,7 +182,7 @@ class TwigExtensions extends ExtensionsAbstract
         /** @noinspection MoreThanThreeArgumentsInspection */
         $filter = new \Twig_SimpleFunction(
             'Pagination',
-            function(
+            function (
                 int $total,
                 int $current,
                 string $linkTemplate,
@@ -210,18 +214,20 @@ class TwigExtensions extends ExtensionsAbstract
                     $useLink = 1;
                     if ($useEllipses === 1) {
                         $useLink = 0;
-                        if ( ($i <= $pageGroupLimit) ||  ($i >= ($current-1) && $i <= ($current+1)) || ($i >= ($total-2)) ) {
+                        if (($i <= $pageGroupLimit)
+                            ||  ($i >= ($current-1) && $i <= ($current+1))
+                            || ($i >= ($total-2))
+                        ) {
                             $useLink = 1;
                             $renderedEllipses = 0;
                         } else {
-
-                            if($renderedEllipses === 0) {
+                            if ($renderedEllipses === 0) {
                                 $items .= $ellipsesTemplate;
                             }
                             $renderedEllipses = 1;
                         }
                     }
-                    if($useLink === 1 ) {
+                    if ($useLink === 1) {
                         $thisItemTemplate = str_replace(
                             array('(link)'),
                             array($link),

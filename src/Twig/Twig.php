@@ -17,7 +17,7 @@ class Twig implements ViewInterface
     ];
     public function __construct(array $config, array $queryParams)
     {
-        $this->config = array_merge($this->config,$config);
+        $this->config = array_merge($this->config, $config);
         $loader     = new \Twig_Loader_Filesystem($this->config['templates_dir']);
         $this->twig = new \Twig_Environment($loader, [
             'cache'         => $this->config['cache_dir'],
@@ -27,7 +27,8 @@ class Twig implements ViewInterface
         $this->extendAndAddGlobals($queryParams);
     }
 
-    private function extendAndAddGlobals(array $queryParams) {
+    private function extendAndAddGlobals(array $queryParams)
+    {
 
         new TwigExtensions($this->twig, $this->config);
         $this->twig->addGlobal('_RC', $this->config); // Runtime Config values
@@ -39,7 +40,7 @@ class Twig implements ViewInterface
         $this->twig->addGlobal($name, $value);
     }
 
-    public function render(string $templateFile, array $parameters=[])
+    public function render(string $templateFile, array $parameters = [])
     {
         $output = $this->twig->render($templateFile, $parameters);
         preg_match('/{{(\s*)Widget\_/msi', $output, $matches);

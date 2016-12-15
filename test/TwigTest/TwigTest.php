@@ -43,9 +43,9 @@ class myTwigClass extends \PHPUnit_Framework_TestCase
         $this->view->addGlobal('add_global', 'ok');
         $result = $this->view->render('main.twig', ['app' => ['name' => 'myTwigClassTest']]);
         $this->assertContains('<span id="add_global">ok</span>', $result,
-            "Twig didn't correctly render and add globals.");
+            'Twig didn\'t correctly render and add globals.');
         $this->assertContains('<span id="url_param">1</span>', $result,
-            "Twig didn't correctly render and add globals.");
+            'Twig didn\'t correctly render and add globals.');
         $this->assertContains('<title>Twig::test</title>', $result, "Twig didn't correctly render and add globals.");
     }
 
