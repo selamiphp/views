@@ -28,7 +28,7 @@ class myTwigClass extends \PHPUnit_Framework_TestCase
         'param2' => 2,
         'param3' => 3
     ];
-    private $view = null;
+    private $view;
 
     public function setUp()
     {

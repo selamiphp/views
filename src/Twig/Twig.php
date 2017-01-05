@@ -11,7 +11,7 @@ class Twig implements ViewInterface
     private $config = [
         'templates_dir' => '',
         'cache_dir'     => '',
-        'debug'         => true,
+        'debug'         => false,
         'auto_reload'   => true
 
     ];

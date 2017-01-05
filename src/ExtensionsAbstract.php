@@ -17,7 +17,6 @@ abstract class ExtensionsAbstract
     {
         $this->extendForTranslation();
         $this->extendForWidget();
-        $this->extendForPagination();
         $this->extendForSiteUrl();
         $this->extendForGetUrl();
         $this->extendForQueryParams();

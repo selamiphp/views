@@ -15,8 +15,8 @@
   "require": {
     "php": "^7.0",
     "mattketmo/camel": "~1.1",
-    "twig/twig": "~1.24.0",
-    "twig/extensions": "^1.3"
+    "twig/twig": "^2.0",
+    "twig/extensions": "^1.4"
   },
   "suggest": {
     "league/plates": "3.* for Plates Templating Engine",
