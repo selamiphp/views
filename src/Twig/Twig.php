@@ -19,7 +19,7 @@ class Twig implements ViewInterface
         new TwigExtensions($this->twig, $this->config);
     }
 
-    public static function twigFactory(ContainerInterface $container, $config) : Twig
+    public static function viewFactory(ContainerInterface $container, array $config) : ViewInterface
     {
         $twig = $container->get(TwigEnvironment::class);
         return new static($twig, $config);

@@ -49,7 +49,7 @@ class myTwigClass extends TestCase
 
         $container->setService(TwigEnvironment::class, $twig);
 
-        $this->view = Twig::twigFactory($container, $this->config);
+        $this->view = Twig::viewFactory($container, $this->config);
     }
 
     /**
