@@ -12,6 +12,7 @@ use BadMethodCallException;
 
 /**
  * Class TwigExtensions extends ViewExtensionsAbstracts
+ *
  * @package Selami\View\Twig
  */
 class TwigExtensions extends ExtensionsAbstract
@@ -31,7 +32,7 @@ class TwigExtensions extends ExtensionsAbstract
         $this->loadFunctions();
     }
 
-    protected function loadExtensions()
+    protected function loadExtensions() : void
     {
         $this->twig->addExtension(new \Twig_Extensions_Extension_Date());
         $this->twig->addExtension(new \Twig_Extensions_Extension_Intl());
@@ -39,7 +40,7 @@ class TwigExtensions extends ExtensionsAbstract
         $this->twig->addExtension(new \Twig_Extensions_Extension_I18n());
     }
 
-    protected function extendForTranslation()
+    protected function extendForTranslation() :void
     {
         $filter = new \Twig_SimpleFunction(
             '_t',
@@ -61,10 +62,11 @@ class TwigExtensions extends ExtensionsAbstract
 
     /**
      * Build translate array.
-     * @param $translateArray
+     *
+     * @param  $translateArray
      * @return array
      */
-    private function buildTranslateArray(array $translateArray)
+    private function buildTranslateArray(array $translateArray) : array
     {
         $tmpArray = [];
         foreach ($translateArray as $key => $value) {
@@ -73,7 +75,7 @@ class TwigExtensions extends ExtensionsAbstract
         return $tmpArray;
     }
 
-    protected function extendForGetUrl()
+    protected function extendForGetUrl() : void
     {
         $filter = new \Twig_SimpleFunction(
             'getUrl',
@@ -100,7 +102,7 @@ class TwigExtensions extends ExtensionsAbstract
         $this->twig->addFunction($filter);
     }
 
-    protected function extendForWidget()
+    protected function extendForWidget() : void
     {
         $filter = new \Twig_SimpleFunction(
             'Widget_*_*',
@@ -140,7 +142,7 @@ class TwigExtensions extends ExtensionsAbstract
         $this->twig->addFunction($filter);
     }
 
-    protected function extendForQueryParams()
+    protected function extendForQueryParams() : void
     {
         $filter = new \Twig_SimpleFunction(
             'queryParams',
@@ -152,7 +154,7 @@ class TwigExtensions extends ExtensionsAbstract
         $this->twig->addFunction($filter);
     }
 
-    protected function extendForSiteUrl()
+    protected function extendForSiteUrl() : void
     {
         $filter = new \Twig_SimpleFunction(
             'siteUrl',
@@ -164,12 +166,14 @@ class TwigExtensions extends ExtensionsAbstract
         $this->twig->addFunction($filter);
     }
 
-    protected function extendForVarDump()
+    protected function extendForVarDump() : void
     {
         $filter = new \Twig_SimpleFunction(
             'varDump',
             function ($args) {
-                /** @noinspection ForgottenDebugOutputInspection */
+                /**
+            * @noinspection ForgottenDebugOutputInspection 
+            */
                 var_dump($args);
             },
             array('is_safe' => array('html'))
@@ -177,9 +181,11 @@ class TwigExtensions extends ExtensionsAbstract
         $this->twig->addFunction($filter);
     }
 
-    protected function extendForPagination()
+    protected function extendForPagination() : void
     {
-        /** @noinspection MoreThanThreeArgumentsInspection */
+        /**
+ * @noinspection MoreThanThreeArgumentsInspection 
+*/
         $filter = new \Twig_SimpleFunction(
             'Pagination',
             function (

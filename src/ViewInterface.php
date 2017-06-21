@@ -5,7 +5,7 @@ namespace Selami\View;
 
 interface ViewInterface
 {
-    public function addGlobal(string $name, $value);
+    public function addGlobal(string $name, $value) : void;
 
-    public function render(string $templateFile, array $parameters = []);
+    public function render(string $templateFile, array $parameters = []) : string;
 }

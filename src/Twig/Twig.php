@@ -17,7 +17,6 @@ class Twig implements ViewInterface
         $this->twig = $twig;
         $this->addGlobals();
         new TwigExtensions($this->twig, $this->config);
-
     }
 
     public static function twigFactory(ContainerInterface $container, $config) : Twig
