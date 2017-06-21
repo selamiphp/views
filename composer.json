@@ -12,11 +12,13 @@
       "homepage": "https://mkorkmaz.com"
     }
   ],
+  "minimum-stability": "stable",
   "require": {
     "php": "^7.0",
+    "psr/container": "^1.0",
     "mattketmo/camel": "~1.1",
-    "twig/twig": "^2.0",
-    "twig/extensions": "^1.4"
+    "twig/twig": "^2.4",
+    "twig/extensions": "^1.5"
   },
   "suggest": {
     "league/plates": "3.* for Plates Templating Engine",
@@ -25,9 +27,10 @@
     "mustache/mustache": "2.11.1 for Mustache Templating Engine"
   },
   "require-dev": {
-    "phpunit/phpunit": "^5.4.0",
+    "phpunit/phpunit": "^6.0",
     "satooshi/php-coveralls": "~1.0",
-    "phpunit/phpcov": "^3.1.0"
+    "phpunit/phpcov": "^4.0",
+    "zendframework/zend-servicemanager":"^3.3"
   },
   "autoload": {
     "psr-4": {

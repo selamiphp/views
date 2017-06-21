@@ -5,34 +5,51 @@ namespace tests;
 use Selami\View\Twig\Twig;
 use InvalidArgumentException;
 use BadMethodCallException;
+use PHPUnit\Framework\TestCase;
+use Twig\Loader\FilesystemLoader;
+use Twig\Environment as TwigEnvironment;
+use Zend\ServiceManager\ServiceManager;
 
-class myTwigClass extends \PHPUnit_Framework_TestCase
+
+class myTwigClass extends TestCase
 {
     private $config = [
+        'runtime' => [
+        ],
         'app_namespace' => 'TwigTest',
+        'base_url' => 'http://127.0.0.1',
         'templates_dir' => __DIR__ . '/templates',
         'cache_dir' => '/tmp',
         'title' => 'Twig::test',
         'debug' => 1,
         'auto_reload' => 1,
-        'base_url' => 'http://127.0.0.1',
         'aliases' => [
             'about' => '{lang}/about',
             'logout' => 'logout'
-
+        ],
+        'query_parameters' => [
+            'param1' => 1,
+            'param2' => 2,
+            'param3' => 3
         ]
     ];
 
-    private $queryParams = [
-        'param1' => 1,
-        'param2' => 2,
-        'param3' => 3
-    ];
     private $view;
 
     public function setUp()
     {
-        $this->view = new Twig($this->config, $this->queryParams);
+
+        $container = new ServiceManager();
+        $loader = new FilesystemLoader($this->config['templates_dir']);
+        $twig = new TwigEnvironment($loader, [
+            'cache'         => $this->config['cache_dir'],
+            'debug'         => $this->config['debug'],
+            'auto_reload'   => $this->config['auto_reload']
+        ]);
+
+        $container->setService(TwigEnvironment::class, $twig);
+
+        $this->view = Twig::twigFactory($container, $this->config);
     }
 
     /**
@@ -73,7 +90,7 @@ class myTwigClass extends \PHPUnit_Framework_TestCase
      */
     public function shouldExtendForQueryParamsSuccessfully()
     {
-        $result = $this->view->render('query_params.twig', ['parameters' => $this->queryParams]);
+        $result = $this->view->render('query_params.twig', ['parameters' => $this->config['query_parameters']]);
         $this->assertContains('<span>?param1=1&param2=2&param3=3</span>', $result, "Twig didn't correctly build http query.");
         $this->assertContains('<span>?controller=login&param1=1&param2=2&param3=3</span>', $result, "Twig didn't correctly build http query.");
     }
@@ -83,7 +100,7 @@ class myTwigClass extends \PHPUnit_Framework_TestCase
      */
     public function shouldExtendForSiteUrlSuccessfully()
     {
-        $result = $this->view->render('site_url.twig', ['parameters' => $this->queryParams]);
+        $result = $this->view->render('site_url.twig', ['parameters' => $this->config['query_parameters']]);
         $this->assertContains('<span id="single">http://127.0.0.1</span>', $result, "Twig didn't correctly return base_url.");
         $this->assertContains('<span id="with_parameter">http://127.0.0.1/login</span>', $result, "Twig didn't correctly return base_url.");
     }
@@ -93,7 +110,7 @@ class myTwigClass extends \PHPUnit_Framework_TestCase
      */
     public function shouldExtendForVarDumpSuccessfully()
     {
-        $result = $this->view->render('var_dump.twig', ['parameters' => $this->queryParams]);
+        $result = $this->view->render('var_dump.twig', ['parameters' => $this->config['query_parameters']]);
         $this->assertContains('array(3)', $result, "Twig didn't correctly dump variable.");
         $this->assertContains('param1', $result, "Twig didn't correctly dump variable.");
         $this->assertContains('param2', $result, "Twig didn't correctly dump variable.");
@@ -122,7 +139,7 @@ class myTwigClass extends \PHPUnit_Framework_TestCase
      */
     public function shouldExtendForWidgetsSuccessfully()
     {
-        $result = $this->view->render('widgets.twig', ['parameters' => $this->queryParams]);
+        $result = $this->view->render('widgets.twig', ['parameters' => $this->config['query_parameters']]);
         $this->assertContains('<span id="top">top</span>', $result, "Twig didn't correctly return widget.");
         $this->assertContains('<span id="top1">top1</span>', $result, "Twig didn't correctly return widget.");
         $this->assertContains('<span id="top2">top2</span>', $result, "Twig didn't correctly return widget.");
