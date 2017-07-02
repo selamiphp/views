@@ -16,7 +16,6 @@ abstract class ExtensionsAbstract
      */
     protected function loadFunctions() : void
     {
-        $this->extendForTranslation();
         $this->extendForWidget();
         $this->extendForSiteUrl();
         $this->extendForGetUrl();

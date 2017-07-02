@@ -66,14 +66,7 @@ class myTwigClass extends TestCase
         $this->assertContains('<title>Twig::test</title>', $result, "Twig didn't correctly render and add globals.");
     }
 
-    /**
-     * @test
-     */
-    public function shouldExtendForTranslationSuccessfully()
-    {
-        $result = $this->view->render('translation.twig', ['translation' => ['loaded_language' => 'tr_TR']]);
-        $this->assertContains('<span id="translation">tr_TR</span>', $result, "Twig didn't correctly translate.");
-    }
+
 
     /**
      * @test
