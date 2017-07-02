@@ -14,7 +14,7 @@ abstract class ExtensionsAbstract
     /**
      * Load functions that will be used in the templates
      */
-    protected function loadFunctions()
+    protected function loadFunctions() : void
     {
         $this->extendForTranslation();
         $this->extendForWidget();
@@ -28,18 +28,14 @@ abstract class ExtensionsAbstract
     /**
      * Load extensions of templating engines
      */
-    protected function loadExtensions() 
-    { 
-    }
+    abstract protected function loadExtensions() : void;
 
     /**
      * Extend for function _t that translates using defined global lang variable
      * $lang = ['name' => 'Selami']
      * {{ _t('Hello @name',lang) }} produces Hello Selami
      */
-    protected function extendForTranslation() 
-    { 
-    }
+    abstract protected function extendForTranslation() : void;
 
     /**
      * Extend for function getUrl that returns url path for an alias.
@@ -53,9 +49,7 @@ abstract class ExtensionsAbstract
      * and $baseUrl = 'http://127.0.0.1' and $page_lang = 'en_US'
      * {{ getUrl('about', {'lang': page_lang}) }} produces http://127.0.0.1/en_US/about-us
      */
-    protected function extendForGetUrl()
-    { 
-    }
+    abstract protected function extendForGetUrl() : void;
 
     /**
      * Extend for wildcard Widget functions. Widget function determines the class and method that will be called.
@@ -66,36 +60,28 @@ abstract class ExtensionsAbstract
      *  }
      *  )();
      */
-    protected function extendForWidget() 
-    { 
-    }
+    abstract  protected function extendForWidget() : void;
 
     /**
      * Extend for queryParams function that returns http_build_query result using passed parameters.
      * $prefix = '?';
      * {{ queryParams({'param1':1,'param2':2}, $prefix) }} returns ?param1=1&param2=2
      */
-    protected function extendForQueryParams() 
-    { 
-    }
+    abstract protected function extendForQueryParams() : void;
 
     /**
      * Extend for function siteUrl that returns defined baseUrl of the site
      * Let's say $baseUrl = 'http://127.0.0.1';
      * {{ siteUrl('/home') }} produces http://127.0.0.1/home
      */
-    protected function extendForSiteUrl() 
-    { 
-    }
+    abstract  protected function extendForSiteUrl() : void;
 
     /**
      * Extend for function varDump. Just outputs var_dump of passed parameter.
      *
      * Use it for debugging purposes.
      */
-    protected function extendForVarDump() 
-    { 
-    }
+    abstract protected function extendForVarDump() : void;
 
     /**
      * Extend for function Pagination. This function builds pagination html.
@@ -131,7 +117,5 @@ abstract class ExtensionsAbstract
      *      <li><a href="/list?page_num=20" class="">3</a></li>
      * </ul>
      */
-    protected function extendForPagination() 
-    { 
-    }
+    abstract protected function extendForPagination() : void;
 }
