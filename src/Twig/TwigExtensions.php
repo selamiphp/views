@@ -40,26 +40,6 @@ class TwigExtensions extends ExtensionsAbstract
         $this->twig->addExtension(new \Twig_Extensions_Extension_I18n());
     }
 
-    protected function extendForTranslation() :void
-    {
-        $filter = new \Twig_SimpleFunction(
-            '_t',
-            function (
-                $string,
-                array $findAndReplace = null
-            ) {
-                $translation = _($string);
-                if (is_array($findAndReplace)) {
-                    $translateArray = $this->buildTranslateArray($findAndReplace);
-                    $translation = strtr($translation, $translateArray);
-                }
-                return $translation;
-            },
-            array('is_safe' => array('html'))
-        );
-        $this->twig->addFunction($filter);
-    }
-
     /**
      * Build translate array.
      *

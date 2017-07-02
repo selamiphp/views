@@ -31,13 +31,6 @@ abstract class ExtensionsAbstract
     abstract protected function loadExtensions() : void;
 
     /**
-     * Extend for function _t that translates using defined global lang variable
-     * $lang = ['name' => 'Selami']
-     * {{ _t('Hello @name',lang) }} produces Hello Selami
-     */
-    abstract protected function extendForTranslation() : void;
-
-    /**
      * Extend for function getUrl that returns url path for an alias.
      *
      * Let's say $aliases = ['home' => '/', 'about' => '/about-us']
