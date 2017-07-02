@@ -40,21 +40,6 @@ class TwigExtensions extends ExtensionsAbstract
         $this->twig->addExtension(new \Twig_Extensions_Extension_I18n());
     }
 
-    /**
-     * Build translate array.
-     *
-     * @param  $translateArray
-     * @return array
-     */
-    private function buildTranslateArray(array $translateArray) : array
-    {
-        $tmpArray = [];
-        foreach ($translateArray as $key => $value) {
-            $tmpArray['@'.$key] = $value;
-        }
-        return $tmpArray;
-    }
-
     protected function extendForGetUrl() : void
     {
         $filter = new \Twig_SimpleFunction(
