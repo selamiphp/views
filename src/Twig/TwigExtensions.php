@@ -3,10 +3,9 @@ declare(strict_types = 1);
 
 namespace Selami\View\Twig;
 
+use Selami\Stdlib\CaseConverter;
 use Selami\View\ExtensionsAbstract;
 use Twig_Environment;
-use Camel\CaseTransformer;
-use Camel\Format;
 use InvalidArgumentException;
 use BadMethodCallException;
 
@@ -19,15 +18,11 @@ class TwigExtensions extends ExtensionsAbstract
 {
     private $twig;
     private $config;
-    private $toCamelCase;
-    private $toSnakeCase;
 
     public function __construct(Twig_Environment $twig, array $config)
     {
         $this->twig = $twig;
         $this->config = $config;
-        $this->toCamelCase = new CaseTransformer(new Format\SnakeCase, new Format\StudlyCaps);
-        $this->toSnakeCase = new CaseTransformer(new Format\CamelCase, new Format\SnakeCase);
         $this->loadExtensions();
         $this->loadFunctions();
     }
@@ -72,8 +67,8 @@ class TwigExtensions extends ExtensionsAbstract
         $filter = new \Twig_SimpleFunction(
             'Widget_*_*',
             function ($widgetNameStr, $widgetActionStr, $args = []) {
-                $widgetAction = $this->toCamelCase->transform($widgetActionStr);
-                $widgetName = $this->toCamelCase->transform($widgetNameStr);
+                $widgetAction = CaseConverter::toPascalCase($widgetActionStr);
+                $widgetName =  CaseConverter::toPascalCase($widgetNameStr);
                 $widget = '\\' . $this->config['app_namespace'] . '\\Widget\\' . $widgetName;
                 if (!class_exists($widget)) {
                     $message = 'Widget ' . $widgetName . '_' . $widgetAction . ' has not class name as ' . $widget;
@@ -84,9 +79,9 @@ class TwigExtensions extends ExtensionsAbstract
                     $message = 'Widget ' . $widget . ' has not method name as ' . $widgetAction;
                     throw new BadMethodCallException($message);
                 }
-                $templateFileBasename = $args['template'] ?? $this->toSnakeCase->transform($widgetActionStr) . '.twig';
+                $templateFileBasename = $args['template'] ?? CaseConverter::toSnakeCase($widgetActionStr) . '.twig';
                 $templateFullPath = $this->config['templates_dir'] . '/_widgets/'
-                    . $this->toSnakeCase->transform($widgetNameStr) . '/' . $templateFileBasename;
+                    . CaseConverter::toSnakeCase($widgetNameStr) . '/' . $templateFileBasename;
 
                 if (!file_exists($templateFullPath)) {
                     $message = sprintf(
@@ -98,7 +93,7 @@ class TwigExtensions extends ExtensionsAbstract
                     throw new InvalidArgumentException($message);
                 }
                 $templateFile =  '_widgets/'
-                    . $this->toSnakeCase->transform($widgetNameStr) . '/' . $templateFileBasename;
+                    . CaseConverter::toSnakeCase($widgetNameStr) . '/' . $templateFileBasename;
                 $widgetData = $widgetInstance->{$widgetAction}();
                 return $this->twig->render($templateFile, $widgetData);
             },

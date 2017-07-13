@@ -16,7 +16,7 @@
   "require": {
     "php": "^7.0",
     "psr/container": "^1.0",
-    "mattketmo/camel": "~1.1",
+    "selami/stdlib": "^1.0",
     "twig/twig": "^2.4",
     "twig/extensions": "^1.5"
   },

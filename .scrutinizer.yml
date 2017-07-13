@@ -7,13 +7,6 @@ checks:
 build:
   environment:
     php: '7.1'
-  tests:
-    override:
-      -
-        command: 'phpunit --coverage-clover=.soupmix_coverage'
-        coverage:
-          file: '.soupmix_coverage'
-          format: 'clover'
 filter:
   excluded_paths:
     - "test/"
