@@ -37,7 +37,7 @@ class Pagination implements FunctionInterface
 
     public function run(): string
     {
-        $items =  '';
+        $items = '';
         $renderedEllipses = 0;
         $useEllipses = ($this->total > 10) ? 1 : 0;
         for ($itemIndex = 1; $itemIndex <= $this->total; $itemIndex++) {
