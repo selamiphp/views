@@ -86,13 +86,18 @@ class Pagination implements FunctionInterface
     private function useEllipses(int $itemIndex, array $values, int $renderedEllipses)
     {
         $pageGroupLimit = self::PAGE_GROUP_LIMIT;
-        $item =  '';
         if (($itemIndex <= $pageGroupLimit)
             ||  ($itemIndex >= ($this->current-1) && $itemIndex <= ($this->current+1))
             || ($itemIndex >= ($this->total-2))
         ) {
             return $this->returnLink($values);
         }
+        return $this->returnEllipses($renderedEllipses);
+    }
+
+    private function returnEllipses(int $renderedEllipses)
+    {
+        $item =  '';
         if ($renderedEllipses === 0) {
             $item = $this->ellipsesTemplate;
         }
