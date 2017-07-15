@@ -23,6 +23,5 @@ class Menu
     public function TopTemplateException()
     {
         return ['menu'=>'top_template_exception'];
-
     }
 }
