@@ -8,6 +8,7 @@ use Selami\View\ExtensionsAbstract;
 use Twig_Environment;
 use InvalidArgumentException;
 use BadMethodCallException;
+use Twig_SimpleFunction;
 
 /**
  * Class TwigExtensions extends ViewExtensionsAbstracts
@@ -23,39 +24,19 @@ class TwigExtensions extends ExtensionsAbstract
     {
         $this->twig = $twig;
         $this->config = $config;
-        $this->loadExtensions();
         $this->loadFunctions();
-    }
-
-    protected function loadExtensions() : void
-    {
-        $this->twig->addExtension(new \Twig_Extensions_Extension_Date());
-        $this->twig->addExtension(new \Twig_Extensions_Extension_Intl());
-        $this->twig->addExtension(new \Twig_Extensions_Extension_Text());
-        $this->twig->addExtension(new \Twig_Extensions_Extension_I18n());
     }
 
     protected function extendForGetUrl() : void
     {
-        $filter = new \Twig_SimpleFunction(
+        $filter = new Twig_SimpleFunction(
             'getUrl',
             function (
                 $alias,
                 $params = []
             ) {
-                if (array_key_exists($alias, $this->config['aliases'])) {
-                    $data = $this->config['aliases'][$alias];
-                    $relative_path = $data;
-                    foreach ($params as $param => $value) {
-                        if (strpos($param, ':') === strlen($param)-1) {
-                            $relative_path = preg_replace('/{'.$param.'(.*?)}/msi', $value, $relative_path);
-                        } else {
-                            $relative_path = str_replace('{'.$param.'}', $value, $relative_path);
-                        }
-                    }
-                    return $this->config['base_url'] . '/' . $relative_path;
-                }
-                return '';
+                $function = new Functions\GetUrl($this->config['base_url'], $this->config['aliases'], $alias, $params);
+                return $function->run();
             },
             array('is_safe' => array('html'))
         );
@@ -67,35 +48,11 @@ class TwigExtensions extends ExtensionsAbstract
         $filter = new \Twig_SimpleFunction(
             'Widget_*_*',
             function ($widgetNameStr, $widgetActionStr, $args = []) {
-                $widgetAction = CaseConverter::toPascalCase($widgetActionStr);
-                $widgetName =  CaseConverter::toPascalCase($widgetNameStr);
-                $widget = '\\' . $this->config['app_namespace'] . '\\Widget\\' . $widgetName;
-                if (!class_exists($widget)) {
-                    $message = 'Widget ' . $widgetName . '_' . $widgetAction . ' has not class name as ' . $widget;
-                    throw new BadMethodCallException($message);
-                }
-                $widgetInstance = new $widget($args);
-                if (!method_exists($widgetInstance, $widgetAction)) {
-                    $message = 'Widget ' . $widget . ' has not method name as ' . $widgetAction;
-                    throw new BadMethodCallException($message);
-                }
-                $templateFileBasename = $args['template'] ?? CaseConverter::toSnakeCase($widgetActionStr) . '.twig';
-                $templateFullPath = $this->config['templates_dir'] . '/_widgets/'
-                    . CaseConverter::toSnakeCase($widgetNameStr) . '/' . $templateFileBasename;
 
-                if (!file_exists($templateFullPath)) {
-                    $message = sprintf(
-                        '%s  template file not found! %s needs a main template file at: %s',
-                        $templateFileBasename,
-                        $widgetNameStr . '_' . $widgetActionStr,
-                        $templateFullPath
-                    );
-                    throw new InvalidArgumentException($message);
-                }
-                $templateFile =  '_widgets/'
-                    . CaseConverter::toSnakeCase($widgetNameStr) . '/' . $templateFileBasename;
-                $widgetData = $widgetInstance->{$widgetAction}();
-                return $this->twig->render($templateFile, $widgetData);
+
+                $function = new Functions\Widget($this->twig, $this->config, $widgetNameStr, $widgetActionStr, $args);
+                return $function->run();
+
             },
             array('is_safe' => array('html'))
         );
