@@ -40,8 +40,7 @@ class Pagination implements FunctionInterface
         $items =  '';
         $renderedEllipses = 0;
         $useEllipses = ($this->total > 10) ? 1 : 0;
-
-        for ($itemIndex=1; $itemIndex <= $this->total; $itemIndex++) {
+        for ($itemIndex = 1; $itemIndex <= $this->total; $itemIndex++) {
             $item = $this->getItem($itemIndex, $renderedEllipses, $useEllipses);
             $items .= $item[0];
             $renderedEllipses = $item[1];
@@ -62,9 +61,7 @@ class Pagination implements FunctionInterface
         $values['(item_class)'] = $class;
         $values['(text)'] = $itemIndex;
         $values['(href)'] = str_replace('(page_num)', $itemIndex, $this->linkTemplate);
-
         $itemData = $this->determineUseLink($itemIndex, $values, $useEllipses, $renderedEllipses);
-
         return $itemData;
     }
 
@@ -85,8 +82,7 @@ class Pagination implements FunctionInterface
 
     private function useEllipses(int $itemIndex, array $values, int $renderedEllipses)
     {
-        $pageGroupLimit = self::PAGE_GROUP_LIMIT;
-        if (($itemIndex <= $pageGroupLimit)
+        if (($itemIndex <= self::PAGE_GROUP_LIMIT)
             ||  ($itemIndex >= ($this->current-1) && $itemIndex <= ($this->current+1))
             || ($itemIndex >= ($this->total-2))
         ) {
@@ -97,7 +93,7 @@ class Pagination implements FunctionInterface
 
     private function returnEllipses(int $renderedEllipses)
     {
-        $item =  '';
+        $item = '';
         if ($renderedEllipses === 0) {
             $item = $this->ellipsesTemplate;
         }
