@@ -25,11 +25,6 @@ abstract class ExtensionsAbstract
     }
 
     /**
-     * Load extensions of templating engines
-     */
-    abstract protected function loadExtensions() : void;
-
-    /**
      * Extend for function getUrl that returns url path for an alias.
      *
      * Let's say $aliases = ['home' => '/', 'about' => '/about-us']
