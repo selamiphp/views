@@ -70,7 +70,6 @@ class Pagination implements FunctionInterface
 
     private function determineUseLink(int $itemIndex, array $values, int $useEllipses, int $renderedEllipses) : array
     {
-        $item ='';
         if ($useEllipses === 1) {
             return $this->useEllipses($itemIndex, $values, $renderedEllipses);
         }

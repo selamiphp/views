@@ -5,7 +5,7 @@ namespace Selami\View\Twig;
 
 use Selami\Stdlib\CaseConverter;
 use Selami\View\ExtensionsAbstract;
-use Twig_Environment;
+use Twig\Environment;
 use InvalidArgumentException;
 use BadMethodCallException;
 use Twig_SimpleFunction;
@@ -20,7 +20,7 @@ class TwigExtensions extends ExtensionsAbstract
     private $twig;
     private $config;
 
-    public function __construct(Twig_Environment $twig, array $config)
+    public function __construct(Environment $twig, array $config)
     {
         $this->twig = $twig;
         $this->config = $config;
