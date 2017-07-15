@@ -17,9 +17,13 @@ class Widget implements FunctionInterface
     private $templateFile;
     private $widgetData;
 
-    public function __construct(Environment $twig, array $config, string $widgetNameStr, string $widgetActionStr, array $args)
-    {
-
+    public function __construct(
+        Environment $twig,
+        array $config,
+        string $widgetNameStr,
+        string $widgetActionStr,
+        array $args
+    ) {
         $this->twig = $twig;
         $this->config = $config;
         $widgetAction = CaseConverter::toPascalCase($widgetActionStr);
@@ -67,6 +71,5 @@ class Widget implements FunctionInterface
     public function run() : string
     {
         return $this->twig->render($this->templateFile, $this->widgetData);
-
     }
 }
