@@ -34,6 +34,7 @@
   },
   "autoload": {
     "psr-4": {
+      "Selami\\View\\": "src/",
       "Selami\\View\\Twig\\": "src/Twig/",
       "Selami\\View\\Twig\\Functions\\": "src/Twig/Functions"
     }
