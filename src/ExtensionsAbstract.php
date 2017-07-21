@@ -16,6 +16,7 @@ abstract class ExtensionsAbstract
      */
     protected function loadFunctions() : void
     {
+        $this->extendForTranslator();
         $this->extendForWidget();
         $this->extendForSiteUrl();
         $this->extendForGetUrl();
@@ -23,6 +24,8 @@ abstract class ExtensionsAbstract
         $this->extendForPagination();
         $this->extendForVarDump();
     }
+
+    abstract protected function extendForTranslator() : void;
 
     /**
      * Extend for function getUrl that returns url path for an alias.

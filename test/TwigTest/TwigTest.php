@@ -30,6 +30,9 @@ class myTwigClass extends TestCase
             'param1' => 1,
             'param2' => 2,
             'param3' => 3
+        ],
+        'dictionary' => [
+            'Hello %s' => 'Merhaba %s'
         ]
     ];
 
@@ -81,6 +84,17 @@ class myTwigClass extends TestCase
         $result = $this->view->render('get_url.twig', ['loaded_language' => 'tr_TR']);
         $this->assertContains('<span>http://127.0.0.1/logout</span>', $result, "Twig didn't correctly get url.");
         $this->assertContains('<span>http://127.0.0.1/tr_TR/about</span>', $result, "Twig didn't correctly get url.");
+    }
+
+
+    /**
+     * @test
+     */
+    public function shouldExtendForTranslatorSuccessfully()
+    {
+        $result = $this->view->render('translation.twig');
+        $this->assertContains('Merhaba Selami', $result, "Twig didn't correctly translate.");
+        $this->assertContains('Text missing in dictionary', $result, "Twig didn't correctly translate.");
     }
 
     /**

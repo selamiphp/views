@@ -27,6 +27,24 @@ class TwigExtensions extends ExtensionsAbstract
         $this->loadFunctions();
     }
 
+    protected function extendForTranslator() : void
+    {
+        $dictionary = $this->config['dictionary'];
+        $filter = new \Twig_SimpleFunction(
+            'translate',
+            function (
+                $string
+            ) use ($dictionary) {
+                if (array_key_exists($string, $dictionary)) {
+                    return $dictionary[$string];
+                }
+                return $string;
+            },
+            array('is_safe' => array('html'))
+        );
+        $this->twig->addFunction($filter);
+    }
+
     protected function extendForGetUrl() : void
     {
         $filter = new Twig_SimpleFunction(
