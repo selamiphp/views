@@ -55,7 +55,7 @@ class Widget implements FunctionInterface
         string $widgetNameStr,
         string $widgetActionStr
     ) {
-        $templateFullPath = $this->config['templates_dir'] . '/_widgets/'
+        $templateFullPath = $this->config['templates_path'] . '/_widgets/'
             . CaseConverter::toSnakeCase($widgetNameStr) . '/' . $templateFileBasename;
         if (!file_exists($templateFullPath)) {
             $message = sprintf(

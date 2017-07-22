@@ -30,11 +30,11 @@ class Twig implements ViewInterface
         // Runtime Config values
         $this->twig->addGlobal('RuntimeConfig', $this->config);
         // Query Parameters ($_REQUEST)
-        $this->twig->addGlobal('QueryParameters', $this->config['query_parameters']??[]);
+        $this->twig->addGlobal('QueryParameters', $this->config['runtime']['query_parameters']??[]);
         // Query Parameters ($_SESSION)
-        $this->twig->addGlobal('Sessions', $this->config['session']??[]);
+        $this->twig->addGlobal('Sessions', $this->config['runtime']['session']??[]);
         // Query Parameters ($_COOKIES)
-        $this->twig->addGlobal('Cookies', $this->config['cookies']??[]);
+        $this->twig->addGlobal('Cookies', $this->config['runtime']['cookies']??[]);
     }
 
     public function addGlobal(string $name, $value) : void

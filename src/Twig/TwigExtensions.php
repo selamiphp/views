@@ -53,7 +53,7 @@ class TwigExtensions extends ExtensionsAbstract
                 $alias,
                 $params = []
             ) {
-                $function = new Functions\GetUrl($this->config['base_url'], $this->config['aliases'], $alias, $params);
+                $function = new Functions\GetUrl($this->config['runtime']['base_url'], $this->config['runtime']['aliases'], $alias, $params);
                 return $function->run();
             },
             array('is_safe' => array('html'))
@@ -91,7 +91,7 @@ class TwigExtensions extends ExtensionsAbstract
         $filter = new \Twig_SimpleFunction(
             'siteUrl',
             function ($path = '') {
-                return $this->config['base_url'] . $path;
+                return $this->config['runtime']['base_url'] . $path;
             },
             array('is_safe' => array('html'))
         );

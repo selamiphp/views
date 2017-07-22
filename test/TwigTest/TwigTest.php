@@ -14,23 +14,24 @@ class myTwigClass extends TestCase
 {
     private $config = [
         'runtime' => [
+            'aliases' => [
+                'about' => '{lang}/about',
+                'logout' => 'logout'
+            ],
+            'query_parameters' => [
+                'param1' => 1,
+                'param2' => 2,
+                'param3' => 3
+            ],
+            'base_url' => 'http://127.0.0.1',
+
         ],
         'app_namespace' => 'TwigTest',
-        'base_url' => 'http://127.0.0.1',
-        'templates_dir' => __DIR__ . '/templates',
+        'templates_path' => __DIR__ . '/templates',
         'cache_dir' => '/tmp',
         'title' => 'Twig::test',
         'debug' => 1,
         'auto_reload' => 1,
-        'aliases' => [
-            'about' => '{lang}/about',
-            'logout' => 'logout'
-        ],
-        'query_parameters' => [
-            'param1' => 1,
-            'param2' => 2,
-            'param3' => 3
-        ],
         'dictionary' => [
             'Hello %s' => 'Merhaba %s'
         ]
@@ -42,7 +43,7 @@ class myTwigClass extends TestCase
     {
 
         $container = new ServiceManager();
-        $loader = new FilesystemLoader($this->config['templates_dir']);
+        $loader = new FilesystemLoader($this->config['templates_path']);
         $twig = new TwigEnvironment($loader, [
             'cache'         => $this->config['cache_dir'],
             'debug'         => $this->config['debug'],
@@ -102,7 +103,7 @@ class myTwigClass extends TestCase
      */
     public function shouldExtendForQueryParamsSuccessfully()
     {
-        $result = $this->view->render('query_params.twig', ['parameters' => $this->config['query_parameters']]);
+        $result = $this->view->render('query_params.twig', ['parameters' => $this->config['runtime']['query_parameters']]);
         $this->assertContains('<span>?param1=1&param2=2&param3=3</span>', $result, "Twig didn't correctly build http query.");
         $this->assertContains('<span>?controller=login&param1=1&param2=2&param3=3</span>', $result, "Twig didn't correctly build http query.");
     }
@@ -112,7 +113,7 @@ class myTwigClass extends TestCase
      */
     public function shouldExtendForSiteUrlSuccessfully()
     {
-        $result = $this->view->render('site_url.twig', ['parameters' => $this->config['query_parameters']]);
+        $result = $this->view->render('site_url.twig', ['parameters' => $this->config['runtime']['query_parameters']]);
         $this->assertContains('<span id="single">http://127.0.0.1</span>', $result, "Twig didn't correctly return base_url.");
         $this->assertContains('<span id="with_parameter">http://127.0.0.1/login</span>', $result, "Twig didn't correctly return base_url.");
     }
@@ -122,7 +123,7 @@ class myTwigClass extends TestCase
      */
     public function shouldExtendForVarDumpSuccessfully()
     {
-        $result = $this->view->render('var_dump.twig', ['parameters' => $this->config['query_parameters']]);
+        $result = $this->view->render('var_dump.twig', ['parameters' => $this->config['runtime']['query_parameters']]);
         $this->assertContains('array(3)', $result, "Twig didn't correctly dump variable.");
         $this->assertContains('param1', $result, "Twig didn't correctly dump variable.");
         $this->assertContains('param2', $result, "Twig didn't correctly dump variable.");
@@ -137,7 +138,7 @@ class myTwigClass extends TestCase
         $data = [
             'total' => 20,
             'current' => 8,
-            'linkTemplate' => $this->config['base_url'] . '/list?page_num=(page_num)'
+            'linkTemplate' => $this->config['runtime']['base_url'] . '/list?page_num=(page_num)'
         ];
         $expected = '<ul class="pagination"><li class=""><a href="http://127.0.0.1/list?page_num=1" class="">1</a></li><li class=""><a href="http://127.0.0.1/list?page_num=2" class="">2</a></li><li class=""><a href="http://127.0.0.1/list?page_num=3" class="">3</a></li><li><a>...</a></li><li class=""><a href="http://127.0.0.1/list?page_num=7" class="">7</a></li><li class="active"><a href="http://127.0.0.1/list?page_num=8" class="active">8</a></li><li class=""><a href="http://127.0.0.1/list?page_num=9" class="">9</a></li><li><a>...</a></li><li class=""><a href="http://127.0.0.1/list?page_num=18" class="">18</a></li><li class=""><a href="http://127.0.0.1/list?page_num=19" class="">19</a></li><li class=""><a href="http://127.0.0.1/list?page_num=20" class="">20</a></li></ul>';
         $result = $this->view->render('pagination.twig', $data);
@@ -151,7 +152,7 @@ class myTwigClass extends TestCase
      */
     public function shouldExtendForWidgetsSuccessfully()
     {
-        $result = $this->view->render('widgets.twig', ['parameters' => $this->config['query_parameters']]);
+        $result = $this->view->render('widgets.twig', ['parameters' => $this->config['runtime']['query_parameters']]);
         $this->assertContains('<span id="top">top</span>', $result, "Twig didn't correctly return widget.");
         $this->assertContains('<span id="top1">top1</span>', $result, "Twig didn't correctly return widget.");
         $this->assertContains('<span id="top2">top2</span>', $result, "Twig didn't correctly return widget.");
