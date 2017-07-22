@@ -29,7 +29,7 @@ class TwigExtensions extends ExtensionsAbstract
 
     protected function extendForTranslator() : void
     {
-        $dictionary = $this->config['dictionary'];
+        $dictionary = $this->config['dictionary']?? [];
         $filter = new \Twig_SimpleFunction(
             'translate',
             function (
