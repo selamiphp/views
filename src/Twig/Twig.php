@@ -28,7 +28,7 @@ class Twig implements ViewInterface
     private function addGlobals() : void
     {
         // Runtime Config values
-        $this->twig->addGlobal('RuntimeConfig', $this->config);
+        $this->twig->addGlobal('RuntimeConfig', $this->config['runtime']['config']);
         // Query Parameters ($_REQUEST)
         $this->twig->addGlobal('QueryParameters', $this->config['runtime']['query_parameters']??[]);
         // Query Parameters ($_SESSION)
