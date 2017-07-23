@@ -24,7 +24,9 @@ class myTwigClass extends TestCase
                 'param3' => 3
             ],
             'base_url' => 'http://127.0.0.1',
-
+            'config' => [
+                'title' => 'Twig::test',
+            ]
         ],
         'app_namespace' => 'TwigTest',
         'templates_path' => __DIR__ . '/templates',
