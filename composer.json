@@ -14,17 +14,11 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "php": "^7.0",
+    "php": "^7.1",
     "psr/container": "^1.0",
     "selami/stdlib": "^1.0",
     "twig/twig": "^2.4",
     "twig/extensions": "^1.5"
-  },
-  "suggest": {
-    "league/plates": "3.* for Plates Templating Engine",
-    "smarty/smarty": "~3.1 for Smarty Templating Engine",
-    "latte/latte": "~2.4.2 for Latte Templating Engine",
-    "mustache/mustache": "2.11.1 for Mustache Templating Engine"
   },
   "require-dev": {
     "phpunit/phpunit": "^6.0",
