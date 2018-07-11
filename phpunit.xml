@@ -24,7 +24,7 @@
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true">
+        <whitelist addUncoveredFilesFromWhitelist="true"  processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
         </whitelist>
     </filter>
@@ -33,11 +33,6 @@
             <group>benchmark</group>
         </exclude>
     </groups>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
     <logging>
         <log type="coverage-clover" target="./build/logs/clover.xml"/>
     </logging>
