@@ -14,17 +14,20 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "php": "^7.1",
+    "php": "^7.2",
     "psr/container": "^1.0",
-    "selami/stdlib": "^1.2",
-    "twig/twig": "^2.4",
-    "twig/extensions": "^1.5"
+    "selami/stdlib": "^1.8"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.0",
     "php-coveralls/php-coveralls": "~1.0",
     "phpunit/phpcov": "^5.0",
-    "zendframework/zend-servicemanager":"~3.3"
+    "zendframework/zend-servicemanager":"~3.3",
+    "twig/twig": "^2.6",
+    "twig/extensions": "^1.5"
+  },
+  "suggest": {
+    "twig/twig": "If you use Twig as a templating engine"
   },
   "autoload": {
     "psr-4": {
