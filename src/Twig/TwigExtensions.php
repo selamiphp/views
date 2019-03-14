@@ -33,10 +33,15 @@ class TwigExtensions extends ExtensionsAbstract
         $filter = new \Twig_SimpleFunction(
             'translate',
             function (
-                $string
+                $string, ...$findAndReplace
             ) use ($dictionary) {
                 if (array_key_exists($string, $dictionary)) {
-                    return $dictionary[$string];
+                    $string = $dictionary[$string];
+                }
+                if (! empty($findAndReplace)) {
+                    foreach ($findAndReplace[0] as $find => $replace) {
+                        $string = str_replace('{{'.$find.'}}', $replace, $string);
+                    }
                 }
                 return $string;
             },
