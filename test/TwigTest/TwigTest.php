@@ -1,16 +1,15 @@
 <?php
 
-namespace tests;
+namespace TwigTests;
 
 use Selami\View\Twig\Twig;
-use InvalidArgumentException;
-use BadMethodCallException;
 use PHPUnit\Framework\TestCase;
 use Twig\Loader\FilesystemLoader;
 use Twig\Environment as TwigEnvironment;
+use Twig\Error\RuntimeError;
 use Zend\ServiceManager\ServiceManager;
 
-class myTwigClass extends TestCase
+class TwigTest extends TestCase
 {
     private $config = [
         'runtime' => [
@@ -28,7 +27,7 @@ class myTwigClass extends TestCase
                 'title' => 'Twig::test',
             ]
         ],
-        'app_namespace' => 'TwigTest',
+        'app_namespace' => 'TwigTests',
         'templates_path' => __DIR__ . '/templates',
         'cache_dir' => '/tmp',
         'title' => 'Twig::test',
@@ -41,7 +40,7 @@ class myTwigClass extends TestCase
 
     private $view;
 
-    public function setUp()
+    protected function setUp(): void
     {
 
         $container = new ServiceManager();
@@ -63,18 +62,18 @@ class myTwigClass extends TestCase
     public function shouldRenderHtmlAndAddGlobalsSuccessfully()
     {
         $this->view->addGlobal('add_global', 'ok');
-        $result = $this->view->render('main.twig', ['app' => ['name' => 'myTwigClassTest']]);
-        $this->assertContains(
+        $result = $this->view->render('main.twig', ['app' => ['name' => TwigTest::class]]);
+        $this->assertStringContainsString(
             '<span id="add_global">ok</span>',
             $result,
             'Twig didn\'t correctly render and add globals.'
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<span id="url_param">1</span>',
             $result,
             'Twig didn\'t correctly render and add globals.'
         );
-        $this->assertContains('<title>Twig::test</title>', $result, "Twig didn't correctly render and add globals.");
+        $this->assertStringContainsString('<title>Twig::test</title>', $result, "Twig didn't correctly render and add globals.");
     }
 
 
@@ -85,8 +84,8 @@ class myTwigClass extends TestCase
     public function shouldExtendForGetUrlSuccessfully()
     {
         $result = $this->view->render('get_url.twig', ['loaded_language' => 'tr_TR']);
-        $this->assertContains('<span>http://127.0.0.1/logout</span>', $result, "Twig didn't correctly get url.");
-        $this->assertContains('<span>http://127.0.0.1/tr_TR/about</span>', $result, "Twig didn't correctly get url.");
+        $this->assertStringContainsString('<span>http://127.0.0.1/logout</span>', $result, "Twig didn't correctly get url.");
+        $this->assertStringContainsString('<span>http://127.0.0.1/tr_TR/about</span>', $result, "Twig didn't correctly get url.");
     }
 
 
@@ -96,8 +95,8 @@ class myTwigClass extends TestCase
     public function shouldExtendForTranslatorSuccessfully()
     {
         $result = $this->view->render('translation.twig');
-        $this->assertContains('Merhaba Selami', $result, "Twig didn't correctly translate.");
-        $this->assertContains('Text missing in dictionary', $result, "Twig didn't correctly translate.");
+        $this->assertStringContainsString('Merhaba Selami', $result, "Twig didn't correctly translate.");
+        $this->assertStringContainsString('Text missing in dictionary', $result, "Twig didn't correctly translate.");
     }
 
     /**
@@ -106,8 +105,8 @@ class myTwigClass extends TestCase
     public function shouldExtendForQueryParamsSuccessfully()
     {
         $result = $this->view->render('query_params.twig', ['parameters' => $this->config['runtime']['query_parameters']]);
-        $this->assertContains('<span>?param1=1&param2=2&param3=3</span>', $result, "Twig didn't correctly build http query.");
-        $this->assertContains('<span>?controller=login&param1=1&param2=2&param3=3</span>', $result, "Twig didn't correctly build http query.");
+        $this->assertStringContainsString('<span>?param1=1&param2=2&param3=3</span>', $result, "Twig didn't correctly build http query.");
+        $this->assertStringContainsString('<span>?controller=login&param1=1&param2=2&param3=3</span>', $result, "Twig didn't correctly build http query.");
     }
 
     /**
@@ -116,8 +115,8 @@ class myTwigClass extends TestCase
     public function shouldExtendForSiteUrlSuccessfully()
     {
         $result = $this->view->render('site_url.twig', ['parameters' => $this->config['runtime']['query_parameters']]);
-        $this->assertContains('<span id="single">http://127.0.0.1</span>', $result, "Twig didn't correctly return base_url.");
-        $this->assertContains('<span id="with_parameter">http://127.0.0.1/login</span>', $result, "Twig didn't correctly return base_url.");
+        $this->assertStringContainsString('<span id="single">http://127.0.0.1</span>', $result, "Twig didn't correctly return base_url.");
+        $this->assertStringContainsString('<span id="with_parameter">http://127.0.0.1/login</span>', $result, "Twig didn't correctly return base_url.");
     }
 
     /**
@@ -126,10 +125,10 @@ class myTwigClass extends TestCase
     public function shouldExtendForVarDumpSuccessfully()
     {
         $result = $this->view->render('var_dump.twig', ['parameters' => $this->config['runtime']['query_parameters']]);
-        $this->assertContains('array(3)', $result, "Twig didn't correctly dump variable.");
-        $this->assertContains('param1', $result, "Twig didn't correctly dump variable.");
-        $this->assertContains('param2', $result, "Twig didn't correctly dump variable.");
-        $this->assertContains('param3', $result, "Twig didn't correctly dump variable.");
+        $this->assertStringContainsString('array(3)', $result, "Twig didn't correctly dump variable.");
+        $this->assertStringContainsString('param1', $result, "Twig didn't correctly dump variable.");
+        $this->assertStringContainsString('param2', $result, "Twig didn't correctly dump variable.");
+        $this->assertStringContainsString('param3', $result, "Twig didn't correctly dump variable.");
     }
 
     /**
@@ -144,20 +143,18 @@ class myTwigClass extends TestCase
         ];
         $expected = '<ul class="pagination"><li class=""><a href="http://127.0.0.1/list?page_num=1" class="">1</a></li><li class=""><a href="http://127.0.0.1/list?page_num=2" class="">2</a></li><li class=""><a href="http://127.0.0.1/list?page_num=3" class="">3</a></li><li><a>...</a></li><li class=""><a href="http://127.0.0.1/list?page_num=7" class="">7</a></li><li class="active"><a href="http://127.0.0.1/list?page_num=8" class="active">8</a></li><li class=""><a href="http://127.0.0.1/list?page_num=9" class="">9</a></li><li><a>...</a></li><li class=""><a href="http://127.0.0.1/list?page_num=18" class="">18</a></li><li class=""><a href="http://127.0.0.1/list?page_num=19" class="">19</a></li><li class=""><a href="http://127.0.0.1/list?page_num=20" class="">20</a></li></ul>';
         $result = $this->view->render('pagination.twig', $data);
-        $this->assertContains($expected, $result, "Twig didn't correctly return pagination.");
+        $this->assertStringContainsString($expected, $result, "Twig didn't correctly return pagination.");
     }
 
 
     /**
      * @test
-     * @expectedException Twig_Error_Runtime
      */
     public function shouldExtendForWidgetsSuccessfully()
     {
-        $result = $this->view->render('widgets.twig', ['parameters' => $this->config['runtime']['query_parameters']]);
-        $this->assertContains('<span id="top">top</span>', $result, "Twig didn't correctly return widget.");
-        $this->assertContains('<span id="top1">top1</span>', $result, "Twig didn't correctly return widget.");
-        $this->assertContains('<span id="top2">top2</span>', $result, "Twig didn't correctly return widget.");
+        $this->expectException(RuntimeError::class);
+
+        $this->view->render('widgets.twig', ['parameters' => $this->config['runtime']['query_parameters']]);
     }
 
     /**
@@ -166,8 +163,8 @@ class myTwigClass extends TestCase
     public function shouldRenderWidgetFromAnotherSourcesSuccessfully()
     {
         $this->view->addGlobal('add_global', '{{Widget_menu_top()}}');
-        $result = $this->view->render('main.twig', ['app' => ['name' => 'myTwigClassTest']]);
+        $result = $this->view->render('main.twig', ['app' => ['name' => TwigTest::class]]);
 
-        $this->assertContains('<span id="top">top</span></span', $result, "Twig didn't correctly render for widgets from anotherSources.");
+        $this->assertStringContainsString('<span id="top">top</span></span', $result, "Twig didn't correctly render for widgets from anotherSources.");
     }
 }
