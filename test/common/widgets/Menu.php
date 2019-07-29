@@ -1,6 +1,6 @@
 <?php
 
-namespace TwigTest\Widget;
+namespace TwigTests\Widget;
 
 class Menu
 {
